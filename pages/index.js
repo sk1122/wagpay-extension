@@ -11,9 +11,13 @@ import WalletConnectProvider from '@walletconnect/web3-provider'
 import Authereum from "authereum";
 const INFURA_ID = '460f40a260564ac4a4f4b3fffb032dad';
 import { ethers } from "ethers";
+import useHyphen from "../hooks/useHyphen";
+import { useAccountContext } from "./_context";
 
 
 function WagPay() {
+  console.log(window, "WINDOW")
+  
   const connectETH = async () => {
     const providerOptions = {
       walletconnect: {
@@ -45,6 +49,20 @@ function WagPay() {
       console.log(e)
     }
   }
+
+  const [getTranferFees, bridge] = useHyphen()
+  // console.log(useHyphen())
+
+  const { amount } = useAccountContext()
+
+  const [data, setData] = useState({})
+
+  useEffect(() => {
+    getTranferFees('1', '137', '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', amount)
+      .then(data => setData(data))
+      .catch(e => console.log(e))
+  }, [amount])
+
   return (
     <div className="text-white h-full overflow-hidden relative w-[400px] max-w-2xl bg-[#191926] px-4 py-6 ">
       <div className=" w-full flex justify-center  mb-9  ">
@@ -66,15 +84,15 @@ function WagPay() {
 
 
       <div className="py-6">
-        <p className="text-sm font-bold ">Gas fees will be : <span className=" text-white text-2xl">{12}</span></p>
-        <p className="text-sm font-bold text-[#27AE60] ">slippage fees wil be  : <span className="text-white text-2xl">{12}</span></p>
-        <p className="text-sm font-bold text-[#2D9CDB] ">Bridge fess wil be  : <span className="text-white text-2xl">{12}</span></p>
+        <p className="text-sm font-bold ">Gas fees will be : <span className=" text-white text-2xl">{data.gas ? data.gas.substring(0, 4) : ""}{ethers.constants.EtherSymbol}</span></p>
+        <p className="text-sm font-bold text-[#27AE60] ">Bridge fees will be  : <span className="text-white text-2xl">{data.transferFee ? data.transferFee.substring(0, 4) : ""}{ethers.constants.EtherSymbol}</span></p>
+        <p className="text-sm font-bold text-[#2D9CDB] ">You will receive  : <span className="text-white text-2xl">{data.amountToGet ? data.amountToGet.substring(0, 4) : ""}{ethers.constants.EtherSymbol}</span></p>
       </div>
       <div>
         <SelectBridge />
       </div>
       <div className="w-full flex justify-center py-10 text-sm">
-        <button className="bg-[#49755B] cursor-pointer px-6 py-4 flex items-center " onClick={connectETH}>WagPay <AiFillThunderbolt className="ml-3 text-yellow-500" /></button>
+        <button className="bg-[#49755B] cursor-pointer px-6 py-4 flex items-center" onClick={connectETH}>WagPay <AiFillThunderbolt className="ml-3 text-yellow-500" /></button>
       </div>
     </div>
   )

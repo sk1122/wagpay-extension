@@ -14,5 +14,11 @@
         "activeTab",
         "http://*/*",
         "https://*/*"
+    ],
+    "content_scripts": [
+        {
+            "matches": ["https://wagpay.xyz/*"],
+            "js": ["/main.js"]
+        }
     ]
 }
