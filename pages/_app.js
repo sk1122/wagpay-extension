@@ -1,5 +1,5 @@
 import '../styles/globals.css'
-import { AppContext } from './_context'
+import { AppContext } from '../context'
 import { useState } from "react"
 
 function MyApp({ Component, pageProps }) {

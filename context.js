@@ -7,7 +7,6 @@ export function useAccountContext() {
   return useContext(AppContext);
 }
 
-export default function () {
-  const [{ data, error, loading }, disconnect] = useAccount()
+export default function D() {
   return <div></div>;
 }

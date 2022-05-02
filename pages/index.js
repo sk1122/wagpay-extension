@@ -12,14 +12,13 @@ import Authereum from "authereum";
 const INFURA_ID = '460f40a260564ac4a4f4b3fffb032dad';
 import { ethers } from "ethers";
 import useHyphen from "../hooks/useHyphen";
-import { useAccountContext } from "./_context";
+import { useAccountContext } from "../context";
 import useHop from "../hooks/useHop";
 import { Chain } from "@hop-protocol/sdk";
+import useBridge from "../hooks/useBridge";
 
 
 function WagPay() {
-  console.log(window, "WINDOW")
-  
   const connectETH = async () => {
     const providerOptions = {
       walletconnect: {
@@ -52,31 +51,12 @@ function WagPay() {
     }
   }
 
-  // const [getTranferFees, bridge] = useHyphen()
-  // // console.log(useHyphen())
-
-  // const { amount } = useAccountContext()
-
-  // const [data, setData] = useState({})
-
-  // useEffect(() => {
-  //   getTranferFees('1', '137', '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', amount)
-  //     .then(data => setData(data))
-  //     .catch(e => console.log(e))
-  // }, [amount])
-
-  const [getTranferFees, bridge] = useHop()
-  // console.log(useHyphen())
-
-  const { amount } = useAccountContext()
-
+  const [chooseBridge, checkLowGasFees] = useBridge()
   const [data, setData] = useState({})
 
   useEffect(() => {
-    getTranferFees(Chain.Polygon, Chain.Ethereum, '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', amount)
-      .then(data => {console.log(data);setData(data)})
-      .catch(e => console.log(e))
-  }, [amount])
+    checkLowGasFees(1, 137, '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', '2000000000000')
+  }, [])
 
   return (
     <div className="text-white h-full overflow-hidden relative w-[400px] max-w-2xl bg-[#191926] px-4 py-6 ">
