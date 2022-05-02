@@ -13,6 +13,8 @@ const INFURA_ID = '460f40a260564ac4a4f4b3fffb032dad';
 import { ethers } from "ethers";
 import useHyphen from "../hooks/useHyphen";
 import { useAccountContext } from "./_context";
+import useHop from "../hooks/useHop";
+import { Chain } from "@hop-protocol/sdk";
 
 
 function WagPay() {
@@ -50,7 +52,20 @@ function WagPay() {
     }
   }
 
-  const [getTranferFees, bridge] = useHyphen()
+  // const [getTranferFees, bridge] = useHyphen()
+  // // console.log(useHyphen())
+
+  // const { amount } = useAccountContext()
+
+  // const [data, setData] = useState({})
+
+  // useEffect(() => {
+  //   getTranferFees('1', '137', '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', amount)
+  //     .then(data => setData(data))
+  //     .catch(e => console.log(e))
+  // }, [amount])
+
+  const [getTranferFees, bridge] = useHop()
   // console.log(useHyphen())
 
   const { amount } = useAccountContext()
@@ -58,8 +73,8 @@ function WagPay() {
   const [data, setData] = useState({})
 
   useEffect(() => {
-    getTranferFees('1', '137', '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', amount)
-      .then(data => setData(data))
+    getTranferFees(Chain.Polygon, Chain.Ethereum, '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', amount)
+      .then(data => {console.log(data);setData(data)})
       .catch(e => console.log(e))
   }, [amount])
 
