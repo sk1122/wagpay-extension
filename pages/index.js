@@ -55,7 +55,7 @@ function WagPay() {
   const [data, setData] = useState({})
 
   useEffect(() => {
-    checkLowGasFees(1, 137, '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', '2000000000000')
+    chooseBridge(1, 137, '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', '1000000000000000000').then(a => console.log(a)).catch(e => console.log(e))
   }, [])
 
   return (
