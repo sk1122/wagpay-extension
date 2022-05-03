@@ -19,6 +19,10 @@ import useBridge from "../hooks/useBridge";
 
 
 function WagPay() {
+  const { BaseToken, setBaseToken, ToToken, setToToken } = useAccountContext()
+
+
+
   const connectETH = async () => {
     const providerOptions = {
       walletconnect: {
@@ -59,7 +63,7 @@ function WagPay() {
   }, [])
 
   return (
-    <div className="text-white h-full overflow-hidden relative w-[400px] max-w-2xl bg-[#191926] px-4 py-6 ">
+    <div className="text-white h-full overflow-hidden relative w-[500px] max-w-2xl bg-[#191926] px-4 py-6  ">
       <div className=" w-full flex justify-center  mb-9  ">
         <h1 className="font-bold text-4xl text-center">WagPay</h1>
       </div>
@@ -68,12 +72,12 @@ function WagPay() {
         <h2>I WANT TO SWAP</h2>
         <div className="flex justify-between bg-slate-900 my-2">
           <InputForToken />
-          <SelectToken />
+          <SelectToken token={BaseToken} setToken={setBaseToken} />
         </div>
         <h1>TO</h1>
         <div className="flex justify-between bg-slate-900 my-2">
           <InputForToken />
-          <SelectToken />
+          <SelectToken token={ToToken} setToken={setToToken} />
         </div>
       </div>
 
