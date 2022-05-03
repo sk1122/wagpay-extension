@@ -55,7 +55,7 @@ function WagPay() {
   const [data, setData] = useState({})
 
   useEffect(() => {
-    chooseBridge(1, 137, '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', '1000000000000000000').then(a => console.log(a)).catch(e => console.log(e))
+    chooseBridge(137, 1, '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', '0xdac17f958d2ee523a2206206994597c13d831ec7', '110000000').then(a => console.log(a)).catch(e => console.log(e))
   }, [])
 
   return (

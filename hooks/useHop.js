@@ -4,18 +4,23 @@ import { ethers } from "ethers"
 const tokenNames = {
 	1: {
 		'0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee': 'ETH',
-		'0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48': 'USDC'
+		'0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2': 'WETH',
+		'0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48': 'USDC',
+		'0xdac17f958d2ee523a2206206994597c13d831ec7': 'USDT',
+		'': 'MATIC'
 	},
 	137: {
 		'0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee': 'MATIC',
-		'0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174': 'USDC'
+		'0xc2132D05D31c914a87C6611C10748AEb04B58e8F': 'USDT',
+		'0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174': 'USDC',
+		'0x7ceb23fd6bc0add59e62ac25578270cff1b9f619': 'ETH'
 	}
 }
 
 const  useHop = () => {
 	const getTransferFees = async (fromChainId, toChainId, tokenAddress, amount, signer) => {
 		return new Promise(async (resolve, reject) => {
-			console.log(fromChainId)
+			console.log(fromChainId, tokenAddress)
 			console.log(tokenNames[fromChainId.chainId][tokenAddress])
 			try {
 				const hop = new Hop('mainnet')
@@ -32,8 +37,8 @@ const  useHop = () => {
 
 				let fees = {
 					gas: 0,
-					amountToGet: ethers.utils.formatUnits(sendData["estimatedReceived"], 18),
-					transferFee: ethers.utils.formatUnits(sendData["adjustedBonderFee"], 18)
+					amountToGet: ethers.utils.formatUnits(sendData["estimatedReceived"], 6),
+					transferFee: ethers.utils.formatUnits(sendData["adjustedBonderFee"], 6)
 				}
 
 				console.log(fees)
