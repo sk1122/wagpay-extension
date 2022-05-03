@@ -1,6 +1,3 @@
-import { AiFillCaretDown, AiFillDollarCircle } from "react-icons/ai";
-import { MdPayment } from "react-icons/md";
-
 const BadgeButton = ({ icon, text }) => {
     return (
         <>
@@ -9,8 +6,7 @@ const BadgeButton = ({ icon, text }) => {
                 <p className="ml-2">{text}</p>
             </div>
         </>
-    )
-}
-
+    );
+};
 
 export default BadgeButton;

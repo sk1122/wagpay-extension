@@ -4,15 +4,22 @@ import { useState } from "react"
 
 function MyApp({ Component, pageProps }) {
   const [amount, setAmount] = useState('');
-  const [BaseToken, setBaseToken] = useState("")
-  const [ToToken, setToToken] = useState("")
+  const [BaseToken, setBaseToken] = useState("");
+  const [ToToken, setToToken] = useState("");
+  const [BaseTokenValue, setBaseTokenValue] = useState(0)
+  const [ToTokenValue, setToTokenValue] = useState(0)
+
   let shared_state = {
     amount,
     setAmount,
     BaseToken,
     setBaseToken,
     ToToken,
-    setToToken
+    setToToken,
+    BaseTokenValue,
+    setBaseTokenValue,
+    ToTokenValue,
+    setToTokenValue
   }
 
   return (

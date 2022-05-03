@@ -1,7 +1,3 @@
-import { AiFillCaretDown, AiFillDollarCircle } from "react-icons/ai";
-import { MdPayment } from "react-icons/md";
-import { useAccountContext } from "../../context";
-
 const SelectToken = ({ token, setToken }) => {
 
     const tokens = [
@@ -27,7 +23,7 @@ const SelectToken = ({ token, setToken }) => {
     return (
         <select onChange={(e) => {
             setToken(e.target.value)
-        }} className="bg-black flex items-center px-6 py-2 text-sm">
+        }} className="bg-black flex items-center px-6 py-2 text-sm focus:outline-none">
             {tokens.map(token => {
                 return <option value={token.value} key={token.name}>{token.name}</option>
             })}
