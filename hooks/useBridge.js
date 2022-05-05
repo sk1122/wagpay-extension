@@ -7,6 +7,7 @@ import { Chain } from "@hop-protocol/sdk"
 import { AlphaRouter } from '@uniswap/smart-order-router'
 import { Token, TradeType, Percent, CurrencyAmount } from '@uniswap/sdk-core';
 import JSBI from 'jsbi'
+import { useAccountContext } from "../context"
 
 const NATIVE_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 
@@ -38,19 +39,21 @@ const tokenAddress = {
 		'ETH': '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619',
 		'USDT': '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
 		'USDC': '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
-		'MATIC': '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619'
+		'MATIC': '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 	}
 }
 
 const chains = {
-	1: 'ethereum',
-	137: 'polygon'
+	1: Chain.Ethereum,
+	137: Chain.Polygon
 }
 
 
 const useBridge = () => {
 	const [getTransferFees, bridge] = useHyphen()
 	const [get, b] = useHop()
+
+	const { signer } = useAccountContext()
 	
 	const checkLowGasFees = async (chainId1, chainId2) => {
 		const provider1 = new ethers.providers.JsonRpcProvider(rpc[chainId1].rpc[0])
@@ -87,8 +90,6 @@ const useBridge = () => {
 			toTokenName = tokenNames[chainId][toTokenAddress]
 		}
 
-		console.log(fromTokenAddress, fromTokenName, chainId)
-
 		const fromToken = new Token(chainId, fromTokenAddress, 18, fromTokenName, 'Wrapped Ether')
 		const toToken = new Token(chainId, toTokenAddress, 6, toTokenName, 'USD//C')
 
@@ -99,34 +100,33 @@ const useBridge = () => {
 			slippageTolerance: new Percent(5, 100),
 			deadline: Math.floor(Date.now() / 1000 + 1800),
 		})
-
-		console.log(route," ROUTE")
 	}
 
 	const getUniswapFees = async (amount) => {
 		return (0.3 / 100) * Number(amount)
 	}
 
-	const getRouteFees = async (route, fromChainId, toChainId, fromTokenAddress, tokenAddress, amount) => {
-		console.log(route)
+	const getRouteFees = async (route, fromChainId, toChainId, fromTokenAddress, tokenAddress, amount, fromDecimal, toDecimal) => {
 		if(route.name === 'HYPHEN') {
-			const fees = await getTransferFees(fromChainId, toChainId, fromTokenAddress, amount)
-			return fees
+			try {
+				const fees = await getTransferFees(fromChainId, toChainId, fromTokenAddress, amount)
+				return fees
+			} catch (E) {
+				throw E
+			}
 		} else {
-			console.log(fromTokenAddress)
-			const fees = await get(Chain.Polygon, Chain.Ethereum, fromTokenAddress, amount)
+			console.log(fromDecimal, toDecimal, fromTokenAddress, fromChainId)
+			const fees = await get(chains[fromChainId], chains[toChainId], fromTokenAddress, amount, signer, fromDecimal, toDecimal)
 			return fees
 		}
 	}
 	
-	const chooseBridge = (fromChainId, toChainId, fromTokenAddress, toTokenAddress, amount) => {
+	const chooseBridge = (fromChainId, toChainId, fromTokenAddress, toTokenAddress, amount, fromToken, toToken) => {
 		return new Promise(async (resolve, reject) => {
 			const fromTokenName = tokenNames[fromChainId][fromTokenAddress]
 			const toTokenName = tokenNames[toChainId][toTokenAddress]
-			console.log(fromTokenName, toTokenName)
 			const UNISWAP_REQUIRED = fromTokenName !== toTokenName
 			var routes = route.available_routes[fromChainId][fromTokenName][toChainId]
-			console.log(routes)
 	
 			if(routes.length <= 0) {
 				reject("No Route Found")
@@ -136,8 +136,6 @@ const useBridge = () => {
 			if(UNISWAP_REQUIRED) {
 				// TODO: Implement checkLowGasFees
 				const uniswapBeforeBridge = await checkLowGasFees(fromChainId, toChainId)
-				console.log(uniswapBeforeBridge, fromChainId, toChainId, 'UNSIWAPPPPP')
-				
 
 				const uniswapFees = await getUniswapFees(
 					amount
@@ -145,13 +143,23 @@ const useBridge = () => {
 
 				for(let i = 0; i < routes.length; i++) {
 					// TODO: Implement getRouteFees
-					const fees = await getRouteFees(routes[i], fromChainId, toChainId, fromTokenAddress, toTokenAddress, amount)
+					var fees
+					try {
+						console.log(11)
+						if(uniswapBeforeBridge) {
+							fees = await getRouteFees(routes[i], fromChainId, toChainId, fromTokenAddress, toTokenAddress, amount, fromToken.decimals, toToken.decimals)
+						} else {
+							console.log(fromTokenAddress)
+							fees = await getRouteFees(routes[i], fromChainId, toChainId, fromTokenAddress, fromTokenAddress, amount, toToken.decimals, fromToken.decimals)
+						}
+					} catch (e) {
+						fees = await getRouteFees(routes[i], fromChainId, toChainId, tokenAddress[fromChainId][toTokenName], toTokenAddress, amount, fromToken.decimals, toToken.decimals)
+					}
 
 					routes[i].gasFees = fees.gasFees
 					routes[i].amountToGet = fees["amountToGet"]
 					routes[i].transferFee = fees["transferFee"]
 					routes[i].uniswapFees = uniswapFees
-					console.log(fromTokenAddress, tokenAddress[toChainId][fromTokenName])
 					routes[i].uniswapData = {
 						chainId: uniswapBeforeBridge ? fromChainId : toChainId,
 						fromTokenAddress: uniswapBeforeBridge ? fromTokenAddress : tokenAddress[toChainId][fromTokenName], 
@@ -159,11 +167,21 @@ const useBridge = () => {
 					}
 				}
 
-				resolve(routes)
+				const sorted = routes.sort((x, y) => {
+					if(Number(x.amountToGet) < Number(y.amountToGet)) {
+						return 1
+					} else if(Number(x.gasFees) < Number(y.gasFees)) {
+						return 1
+					} else {
+						return -1
+					}
+				})
+
+				resolve(sorted)
 			} else {
 				for(let i = 0; i < routes.length; i++) {
 					// TODO: Implement getRouteFees
-					const fees = await getRouteFees(routes[i], fromChainId, toChainId, fromTokenAddress, toTokenAddress, amount)
+					const fees = await getRouteFees(routes[i], fromChainId, toChainId, fromTokenAddress, toTokenAddress, amount, fromToken.decimals, toToken.decimals)
 					
 					routes[i].gasFees = fees.gas
 					routes[i].amountToGet = fees["amountToGet"]
@@ -182,7 +200,7 @@ const useBridge = () => {
 					}
 				})
 
-				resolve(routes)
+				resolve(sorted)
 			}
 		})
 	}

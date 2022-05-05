@@ -4,8 +4,8 @@ import { useState } from "react"
 
 function MyApp({ Component, pageProps }) {
   const [amount, setAmount] = useState('');
-  const [BaseToken, setBaseToken] = useState("");
-  const [ToToken, setToToken] = useState("");
+  const [BaseToken, setBaseToken] = useState(JSON.stringify({name: "ETH",chainId: 1,decimals:18}));
+  const [ToToken, setToToken] = useState(JSON.stringify({name: "ETH",chainId: 1,decimals:18}));
   const [BaseTokenValue, setBaseTokenValue] = useState(0)
   const [ToTokenValue, setToTokenValue] = useState(0)
 

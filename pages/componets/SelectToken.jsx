@@ -2,28 +2,47 @@ const SelectToken = ({ token, setToken }) => {
 
     const tokens = [
         {
-            name: "select Token",
-            value: token
-        },
-        {
             name: "ETH",
-            value: "eth"
+            value: JSON.stringify({
+                name: "ETH",
+                chainId: 1,
+                decimals: 18
+            })
         },
         {
             name: "MATIC",
-            value: "matic"
+            value: JSON.stringify({
+                name: "MATIC",
+                chainId: 137,
+                decimals: 18
+            })
         },
         {
-            name: "SOL",
-            value: "sol"
+            name: "USDC (ETH)",
+            value: JSON.stringify({
+                name: "USDC",
+                chainId: 1,
+                decimals: 6
+            })
+        },
+        {
+            name: "USDC (MATIC)",
+            value: JSON.stringify({
+                name: "USDC",
+                chainId: 137,
+                decimals: 6
+            })
         }
     ]
 
 
     return (
-        <select onChange={(e) => {
-            setToken(e.target.value)
-        }} className="bg-black flex items-center px-6 py-2 text-sm focus:outline-none">
+        <select 
+            value={tokens[0].value}
+            onChange={(e) => {
+                setToken(e.target.value)
+            }} 
+            className="bg-black flex items-center px-6 py-2 text-sm focus:outline-none">
             {tokens.map(token => {
                 return <option value={token.value} key={token.name}>{token.name}</option>
             })}

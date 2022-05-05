@@ -18,10 +18,8 @@ const tokenNames = {
 }
 
 const  useHop = () => {
-	const getTransferFees = async (fromChainId, toChainId, tokenAddress, amount, signer) => {
+	const getTransferFees = async (fromChainId, toChainId, tokenAddress, amount, signer, fromDecimal, toDecimal) => {
 		return new Promise(async (resolve, reject) => {
-			console.log(fromChainId, tokenAddress)
-			console.log(tokenNames[fromChainId.chainId][tokenAddress])
 			try {
 				const hop = new Hop('mainnet')
 				const bridge = hop.connect(signer).bridge(tokenNames[fromChainId.chainId][tokenAddress])
@@ -35,10 +33,12 @@ const  useHop = () => {
 					}
 				}
 
+				console.log(fromDecimal, sendData["estimatedReceived"])
+
 				let fees = {
 					gas: 0,
-					amountToGet: ethers.utils.formatUnits(sendData["estimatedReceived"], 6),
-					transferFee: ethers.utils.formatUnits(sendData["adjustedBonderFee"], 6)
+					amountToGet: ethers.utils.formatUnits(sendData["estimatedReceived"], fromDecimal),
+					transferFee: ethers.utils.formatUnits(sendData["adjustedBonderFee"], fromDecimal)
 				}
 
 				console.log(fees)

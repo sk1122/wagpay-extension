@@ -6,6 +6,7 @@ const INFURA_ID = "460f40a260564ac4a4f4b3fffb032dad";
 import { ethers } from "ethers";
 import { useAccountContext } from "../context";
 import useBridge from "../hooks/useBridge";
+import useHyphen from "../hooks/useHyphen"
 import {
   Intro,
   InputForToken,
@@ -14,6 +15,27 @@ import {
   BadgeButton,
   WalletOptionModal,
 } from "./componets";
+
+const chainIds = {
+  'ETH': 1,
+  'MATIC': 137
+}
+
+const tokenAddress = {
+	1: {
+		'ETH': '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+		'WETH': '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+		'USDC': '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+		'USDT': '0xdac17f958d2ee523a2206206994597c13d831ec7',
+		'MATIC': ''
+	},
+	137: {
+		'ETH': '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619',
+		'USDT': '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+		'USDC': '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+		'MATIC': '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+	}
+}
 
 function WagPay() {
   const {
@@ -30,6 +52,7 @@ function WagPay() {
   const [connectWallet, setConnectWallet] = useState("")
 
   const [chooseBridge, checkLowGasFees] = useBridge();
+  const [getTransferFees, bridge] = useHyphen()
   const [data, setData] = useState({});
 
 
@@ -67,30 +90,22 @@ function WagPay() {
     }
   };
 
-
   useEffect(() => {
-    chooseBridge(
-      137,
-      1,
-      "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
-      "0xdac17f958d2ee523a2206206994597c13d831ec7",
-      "110000000"
-    )
-      .then((a) => console.log(a))
-      .catch((e) => console.log(e));
-  }, []);
-
-  useEffect(() => {
-    setToTokenValue(BaseTokenValue * 2);
-  }, [BaseTokenValue, setToTokenValue]);
-
-  useEffect(() => {
-
-  }, [])
+    console.log(BaseToken, ToToken)
+    const baseToken = JSON.parse(BaseToken)
+    const toToken = JSON.parse(ToToken)
+    if(baseToken && toToken) {
+      const baseTokenAddress = tokenAddress[baseToken.chainId][baseToken.name]
+      console.log(baseToken, toToken)
+      const toTokenAddress = tokenAddress[toToken.chainId][toToken.name]
+      // console.log(BaseToken, ToToken, tokenAddress[baseTokenChainId], baseTokenAddress, toTokenAddress, baseTokenChainId, toTokenChainId)
+  
+      chooseBridge(baseToken.chainId, toToken.chainId, baseTokenAddress, toTokenAddress, BaseTokenValue.toString(), baseToken, toToken)
+        .then(a => {console.log(a);setData(a[0])})
+    }
+  }, [BaseTokenValue, BaseToken, ToToken]);
 
   return (
-
-
     <div className="text-white  overflow-hidden relative w-[500px] max-w-2xl bg-[#191926] px-4 py-6 h-[600px]" onClick={() => setShowModal(false)}>
       <div className=" w-full flex justify-center  mb-9  ">
         <h1 className="font-bold text-4xl text-center">WagPay</h1>
@@ -137,10 +152,11 @@ function WagPay() {
       <div className="w-full flex justify-center py-10 text-sm">
         <button
           className="bg-[#49755B] cursor-pointer px-6 py-4 flex items-center"
-          onClick={(e) => {
-            e.stopPropagation();
-            setShowModal(!showModal)
-          }}
+          // onClick={(e) => {
+          //   e.stopPropagation();
+          //   setShowModal(!showModal)
+          // }}
+          onClick={() => bridge()}
         >
           WagPay <AiFillThunderbolt className="ml-3 text-yellow-500" />
         </button>
