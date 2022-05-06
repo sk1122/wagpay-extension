@@ -55,6 +55,8 @@ function WagPay() {
   const [getTransferFees, bridge] = useHyphen()
   const [data, setData] = useState({});
 
+  const [selectedRoute, setSelectedRoute] = useState({})
+
 
   const connectETH = async () => {
     const providerOptions = {
@@ -101,7 +103,7 @@ function WagPay() {
       // console.log(BaseToken, ToToken, tokenAddress[baseTokenChainId], baseTokenAddress, toTokenAddress, baseTokenChainId, toTokenChainId)
   
       chooseBridge(baseToken.chainId, toToken.chainId, baseTokenAddress, toTokenAddress, BaseTokenValue.toString(), baseToken, toToken)
-        .then(a => {console.log(a);setData(a[0])})
+        .then(a => {console.log(a);setSelectedRoute(a[0])})
     }
   }, [BaseTokenValue, BaseToken, ToToken]);
 
@@ -127,21 +129,21 @@ function WagPay() {
         <p className="text-sm font-bold ">
           Gas fees will be :{" "}
           <span className=" text-white text-2xl">
-            {data.gas ? data.gas.substring(0, 4) : ""}
+            {selectedRoute.gas ? selectedRoute.gas.substring(0, 4) : ""}
             {ethers.constants.EtherSymbol}
           </span>
         </p>
         <p className="text-sm font-bold text-[#27AE60] ">
           Bridge fees will be :{" "}
           <span className="text-white text-2xl">
-            {data.transferFee ? data.transferFee.substring(0, 4) : ""}
+            {selectedRoute.transferFee ? selectedRoute.transferFee.substring(0, 4) : ""}
             {ethers.constants.EtherSymbol}
           </span>
         </p>
         <p className="text-sm font-bold text-[#2D9CDB] ">
           You will receive :{" "}
           <span className="text-white text-2xl">
-            {data.amountToGet ? data.amountToGet.substring(0, 4) : ""}
+            {selectedRoute.amountToGet ? selectedRoute.amountToGet.substring(0, 4) : ""}
             {ethers.constants.EtherSymbol}
           </span>
         </p>
@@ -156,7 +158,7 @@ function WagPay() {
           //   e.stopPropagation();
           //   setShowModal(!showModal)
           // }}
-          onClick={() => bridge()}
+          onClick={() => bridge(selectedRoute, 137, 1, tokenAddress[137][JSON.parse(BaseToken).name], BaseTokenValue)}
         >
           WagPay <AiFillThunderbolt className="ml-3 text-yellow-500" />
         </button>
