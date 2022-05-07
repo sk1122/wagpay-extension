@@ -37,12 +37,13 @@ const SelectToken = ({ token, setToken }) => {
 
 
     return (
-        <select 
-            value={tokens[0].value}
+        <select
+
             onChange={(e) => {
                 setToken(e.target.value)
-            }} 
+            }}
             className="bg-black flex items-center px-6 py-2 text-sm focus:outline-none">
+            <option value="" selected>Select Token</option>
             {tokens.map(token => {
                 return <option value={token.value} key={token.name}>{token.name}</option>
             })}
