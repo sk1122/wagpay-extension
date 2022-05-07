@@ -93,17 +93,18 @@ function WagPay() {
   };
 
   useEffect(() => {
-    console.log(BaseToken, ToToken)
-    const baseToken = JSON.parse(BaseToken)
-    const toToken = JSON.parse(ToToken)
-    if(baseToken && toToken) {
-      const baseTokenAddress = tokenAddress[baseToken.chainId][baseToken.name]
-      console.log(baseToken, toToken)
-      const toTokenAddress = tokenAddress[toToken.chainId][toToken.name]
-      // console.log(BaseToken, ToToken, tokenAddress[baseTokenChainId], baseTokenAddress, toTokenAddress, baseTokenChainId, toTokenChainId)
-  
-      chooseBridge(baseToken.chainId, toToken.chainId, baseTokenAddress, toTokenAddress, BaseTokenValue.toString(), baseToken, toToken)
-        .then(a => {console.log(a);setSelectedRoute(a[0])})
+    if(BaseTokenValue.toString().length >= 1) {
+      const baseToken = JSON.parse(BaseToken)
+      const toToken = JSON.parse(ToToken)
+      if(baseToken && toToken) {
+        const baseTokenAddress = tokenAddress[baseToken.chainId][baseToken.name]
+        console.log(baseToken, toToken)
+        const toTokenAddress = tokenAddress[toToken.chainId][toToken.name]
+        // console.log(BaseToken, ToToken, tokenAddress[baseTokenChainId], baseTokenAddress, toTokenAddress, baseTokenChainId, toTokenChainId)
+    
+        chooseBridge(baseToken.chainId, toToken.chainId, baseTokenAddress, toTokenAddress, ethers.utils.parseEther(BaseTokenValue.toString()), baseToken, toToken)
+          .then(a => {console.log(a);setSelectedRoute(a[0])})
+      }
     }
   }, [BaseTokenValue, BaseToken, ToToken]);
 
@@ -158,7 +159,7 @@ function WagPay() {
           //   e.stopPropagation();
           //   setShowModal(!showModal)
           // }}
-          onClick={() => bridge(selectedRoute, 137, 1, tokenAddress[137][JSON.parse(BaseToken).name], BaseTokenValue)}
+          onClick={() => bridge(selectedRoute, 137, 1, tokenAddress[137]['MATIC'], BaseTokenValue)}
         >
           WagPay <AiFillThunderbolt className="ml-3 text-yellow-500" />
         </button>

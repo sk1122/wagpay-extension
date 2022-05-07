@@ -4,6 +4,7 @@ import { useAccountContext } from "../context"
 const  useHyphen = () => {	
 	const HYPHEN_BASE_URL = "https://hyphen-v2-api.biconomy.io/api/v1"
 	const TESTNET_HYPHEN_BASE_URL = "https://hyphen-v2-api.biconomy.io/api/v1"
+	const NATIVE_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
 
 	const getTransferFees = async (fromChainId, toChainId, tokenAddress, amount) => {
 		return new Promise(async (resolve, reject) => {
@@ -26,8 +27,8 @@ const  useHyphen = () => {
 		})
 	}
 
-	const bridge = async (fromChainId, toChainId, tokenAddress, amount) => {
-		const abi = [{"inputs":[{"internalType":"address","name":"_hyphen","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"AmountNotZero","type":"error"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"receiver","type":"address"},{"indexed":false,"internalType":"uint256","name":"toChainId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"},{"indexed":false,"internalType":"address","name":"tokenAddress","type":"address"}],"name":"FundsTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_from","type":"address"},{"internalType":"address","name":"_receiver","type":"address"},{"internalType":"uint256","name":"toChainId","type":"uint256"},{"internalType":"address","name":"tokenAddress","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"transferNative","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"}]
+	const bridge = async (route, fromChainId, toChainId, tokenAddress, amount) => {
+		const abi = [{"inputs":[{"internalType":"address","name":"_hyphen","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"receiver","type":"address"},{"indexed":false,"internalType":"uint256","name":"toChainId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"},{"indexed":false,"internalType":"address","name":"tokenAddress","type":"address"}],"name":"ERC20FundsTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"receiver","type":"address"},{"indexed":false,"internalType":"uint256","name":"toChainId","type":"uint256"}],"name":"NativeFundsTransferred","type":"event"},{"inputs":[{"internalType":"uint256","name":"toChainId","type":"uint256"},{"internalType":"address","name":"tokenAddress","type":"address"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"string","name":"tag","type":"string"}],"name":"transferERC20","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"uint256","name":"toChainId","type":"uint256"},{"internalType":"string","name":"tag","type":"string"}],"name":"transferNative","outputs":[],"stateMutability":"payable","type":"function"}]
 		try {
 			const { ethereum } = window
 			if (ethereum) {
@@ -37,9 +38,17 @@ const  useHyphen = () => {
 					const provider = new ethers.providers.Web3Provider(ethereum)
 					const signer = await provider.getSigner()
 
-					const contract = new ethers.Contract('0x6A53Aa62dba933aEcd25B3d37F9878136d74E850', abi, signer)
+					const contract = new ethers.Contract('0x2C0F951287332AB8c342AD4254F0C0246ef19ec5', abi, signer)
 					const address = await signer.getAddress()
-					const tx = await contract.transferNative(address, address, 1, '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', ethers.utils.parseEther('1'), { value: ethers.utils.parseEther('1') })
+					var tx
+					if(tokenAddress.toLowerCase() == NATIVE_ADDRESS.toLowerCase()) {
+						tx = await contract.transferNative(ethers.utils.parseEther(amount), address, toChainId, "s", { value: ethers.utils.parseEther(amount) })
+					} else {
+						let erc20abi = ["function approve(address _spender, uint256 _value) public returns (bool success)"]
+						let erc20 = new ethers.Contract(tokenAddress, erc20abi, signer)
+						await erc20.approve(contract.address, ethers.utils.parseEther(amount))
+						tx = await contract.transferERC20(toChainId, tokenAddress, address, ethers.utils.parseEther(amount))
+					}
 					console.log(tx)
 					console.log(accounts[0]);
 				} else {
