@@ -119,7 +119,7 @@ function WagPay() {
       <div className="w-full flex justify-center py-10 text-sm">
         <button
           className="bg-[#49755B] cursor-pointer px-6 py-4 flex items-center"
-          onClick={() => bridge(selectedRoute, 137, 1, tokenAddress[137][JSON.parse(BaseToken).name.toUpperCase()], BaseTokenValue.toString())}
+          onClick={() => bridge(selectedRoute, 137, 1, tokenAddress[137][JSON.parse(BaseToken).name.toUpperCase()], BaseTokenValue.toString(), tokenAddress[1][JSON.parse(ToToken).name.toUpperCase()])}
         >
           WagPay <AiFillThunderbolt className="ml-3 text-yellow-500" />
         </button>
