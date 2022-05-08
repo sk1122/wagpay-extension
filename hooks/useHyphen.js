@@ -47,8 +47,8 @@ const  useHyphen = () => {
 					} else {
 						let erc20abi = ["function approve(address _spender, uint256 _value) public returns (bool success)"]
 						let erc20 = new ethers.Contract(tokenAddress, erc20abi, signer)
-						await erc20.approve(contract.address, ethers.utils.parseEther(amount))
-						tx = await contract.transferERC20(toChainId, tokenAddress, address, ethers.utils.parseEther(amount))
+						await erc20.approve(contract.address, ethers.utils.parseUnits(amount, 6))
+						tx = await contract.transferERC20(toChainId, tokenAddress, address, ethers.utils.parseUnits(amount, 6))
 					}
 
 					await ethereum.request({
