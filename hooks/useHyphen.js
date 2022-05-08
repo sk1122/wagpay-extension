@@ -40,7 +40,8 @@ const  useHyphen = () => {
 
 					const contract = new ethers.Contract('0x2C0F951287332AB8c342AD4254F0C0246ef19ec5', abi, signer)
 					const address = await signer.getAddress()
-					var tx
+					var tx;
+					console.log(tokenAddress, "31")
 					if(tokenAddress.toLowerCase() == NATIVE_ADDRESS.toLowerCase()) {
 						tx = await contract.transferNative(ethers.utils.parseEther(amount), address, toChainId, "s", { value: ethers.utils.parseEther(amount) })
 					} else {

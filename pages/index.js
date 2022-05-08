@@ -67,8 +67,8 @@ function WagPay() {
       const toTokenAddress = tokenAddress[toToken.chainId][toToken.name]
       // console.log(BaseToken, ToToken, tokenAddress[baseTokenChainId], baseTokenAddress, toTokenAddress, baseTokenChainId, toTokenChainId)
 
-      chooseBridge(baseToken.chainId, toToken.chainId, baseTokenAddress, toTokenAddress, BaseTokenValue.toString(), baseToken, toToken)
-        .then(a => { console.log(a); setSelectedRoute(a[0]) })
+      chooseBridge(baseToken.chainId, toToken.chainId, baseTokenAddress, toTokenAddress, ethers.utils.parseEther(BaseTokenValue.toString()), baseToken, toToken)
+        .then(a => { setToTokenValue(a[0].amountToGet.substring(0, 4)); setSelectedRoute(a[0]) })
     }
   }, [BaseTokenValue, BaseToken, ToToken]);
 
@@ -85,12 +85,12 @@ function WagPay() {
         </div>
         <h1>TO</h1>
         <div className="flex justify-between bg-slate-900 my-2">
-          <div className="w-full text-black text-sm focus:outline-none p-1 bg-white flex items-center ">{12}</div>
+          <div className="w-full text-black text-sm focus:outline-none p-1 bg-white flex items-center ">{ToTokenValue}</div>
           <SelectToken token={ToToken} setToken={setToToken} />
         </div>
       </div>
 
-      <div className="py-6">
+      {/* <div className="py-6">
         <p className="text-sm font-bold ">
           Gas fees will be :{" "}
           <span className=" text-white text-2xl">
@@ -112,13 +112,14 @@ function WagPay() {
             {ethers.constants.EtherSymbol}
           </span>
         </p>
-      </div>
-      <div>
+      </div> */}
+      {/* <div>
         <SelectBridge />
-      </div>
+      </div> */}
       <div className="w-full flex justify-center py-10 text-sm">
         <button
           className="bg-[#49755B] cursor-pointer px-6 py-4 flex items-center"
+          onClick={() => bridge(selectedRoute, 137, 1, tokenAddress[137][JSON.parse(BaseToken).name.toUpperCase()], BaseTokenValue.toString())}
         >
           WagPay <AiFillThunderbolt className="ml-3 text-yellow-500" />
         </button>
