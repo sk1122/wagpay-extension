@@ -67,7 +67,7 @@ function WagPay() {
       const toTokenAddress = tokenAddress[toToken.chainId][toToken.name]
       // console.log(BaseToken, ToToken, tokenAddress[baseTokenChainId], baseTokenAddress, toTokenAddress, baseTokenChainId, toTokenChainId)
 
-      chooseBridge(baseToken.chainId, toToken.chainId, baseTokenAddress, toTokenAddress, ethers.utils.parseEther(BaseTokenValue.toString()), baseToken, toToken)
+      chooseBridge(baseToken.chainId, toToken.chainId, baseTokenAddress, toTokenAddress, ethers.utils.parseUnits(BaseTokenValue.toString(), 6), baseToken, toToken)
         .then(a => { setToTokenValue(a[0].amountToGet.substring(0, 4)); setSelectedRoute(a[0]) })
     }
   }, [BaseTokenValue, BaseToken, ToToken]);

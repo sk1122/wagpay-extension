@@ -18,17 +18,17 @@ const SelectToken = ({ token, setToken }) => {
             })
         },
         {
-            name: "USDC (ETH)",
+            name: "USDT (ETH)",
             value: JSON.stringify({
-                name: "USDC",
+                name: "USDT",
                 chainId: 1,
                 decimals: 6
             })
         },
         {
-            name: "USDC (MATIC)",
+            name: "USDT (MATIC)",
             value: JSON.stringify({
-                name: "USDC",
+                name: "USDT",
                 chainId: 137,
                 decimals: 6
             })
