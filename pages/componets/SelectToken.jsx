@@ -1,7 +1,11 @@
 import { InputForToken } from "."
+import { useAccountContext, useDropDownContext } from "../../context"
 import DropDown from "./DropDown"
 
 const SelectToken = ({ tokens }) => {
+    const { baseTokenDropDownOpen, setBaseTokenOpen,
+        toTokenDropDownOpen, setTokenChainOpen, } = useDropDownContext()
+    const { BaseToken, setBaseToken, ToToken, setToToken } = useAccountContext()
     return (
         <>
             <div className="bg-[#232233] px-3 py-3 my-3">
@@ -11,7 +15,7 @@ const SelectToken = ({ tokens }) => {
                         <InputForToken />
                     </div>
                     <div className="w-[40%]">
-                        <DropDown DropDownItems={tokens} defaultvalue={tokens[0]} />
+                        <DropDown DropDownItems={tokens} defaultvalue={tokens[0]} isOpen={baseTokenDropDownOpen} setIsOpen={setBaseTokenOpen} setItem={setBaseToken} chainitem={BaseToken} />
                     </div>
                 </div>
                 <h2 className="text-lg font-bold">You receive</h2>
@@ -20,7 +24,7 @@ const SelectToken = ({ tokens }) => {
                         <InputForToken />
                     </div>
                     <div className="w-[40%]">
-                        <DropDown DropDownItems={tokens} defaultvalue={tokens[1]} />
+                        <DropDown DropDownItems={tokens} defaultvalue={tokens[1]} isOpen={toTokenDropDownOpen} setIsOpen={setTokenChainOpen} setItem={setToToken} chainitem={ToToken} />
                     </div>
                 </div>
             </div>
