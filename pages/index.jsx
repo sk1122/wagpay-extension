@@ -1,23 +1,13 @@
-
+import { MdArrowBackIosNew } from "react-icons/md";
 import { useState, useEffect } from "react";
 import { AiFillThunderbolt } from "react-icons/ai";
 import { useAccountContext } from "../context";
 import { ethers } from "ethers";
 import useBridge from "../hooks/useBridge";
 import useHyphen from "../hooks/useHyphen"
-import {
-  Intro,
-  InputForToken,
-  SelectBridge,
-  SelectToken,
-  BadgeButton,
-  WalletOptionModal,
-} from "./componets";
+import Hero from "./componets/hero";
+import SelectToken from "./componets/SelectToken";
 
-const chainIds = {
-  'ETH': 1,
-  'MATIC': 137
-}
 
 const tokenAddress = {
   1: {
@@ -56,6 +46,63 @@ function WagPay() {
   const [selectedRoute, setSelectedRoute] = useState({})
 
 
+  const tokens = [
+    {
+      name: "ETH",
+      value: JSON.stringify({
+        name: "ETH",
+        chainId: 1,
+        decimals: 18,
+      }),
+    },
+    {
+      name: "MATIC",
+      value: JSON.stringify({
+        name: "MATIC",
+        chainId: 137,
+        decimals: 18,
+      }),
+    },
+    {
+      name: "USDT (ETH)",
+      value: JSON.stringify({
+        name: "USDT",
+        chainId: 1,
+        decimals: 6,
+      }),
+    },
+    {
+      name: "USDT (MATIC)",
+      value: JSON.stringify({
+        name: "USDT",
+        chainId: 137,
+        decimals: 6,
+      }),
+    },
+  ];
+
+
+  const chains = [
+    {
+      name: "Etherium",
+      value: JSON.stringify({
+        name: "ETH",
+        chainId: 1,
+        decimals: 18,
+      }),
+    },
+    {
+      name: "Polygon",
+      value: JSON.stringify({
+        name: "Polygon",
+        chainId: 137,
+        decimals: 18,
+      }),
+    }
+  ]
+
+
+
 
   useEffect(() => {
     console.log(BaseToken, ToToken)
@@ -73,71 +120,50 @@ function WagPay() {
   }, [BaseTokenValue, BaseToken, ToToken]);
 
   return (
-    <div className="text-white  overflow-hidden relative w-full max-w-2xl bg-[#191926] px-4 py-6 h-[600px]" onClick={() => setShowModal(false)}>
-      <div className=" w-full flex justify-center  mb-9  ">
-        <h1 className="font-bold text-4xl text-center">WagPay</h1>
-      </div>
-      <div>
-        <h2>I WANT TO SWAP</h2>
-        <div className="flex justify-between bg-slate-900 my-2">
-          <InputForToken value={BaseTokenValue} setValue={setBaseTokenValue} />
-          <SelectToken token={BaseToken} setToken={setBaseToken} />
+    <div className="text-white  overflow-hidden relative w-full  bg-[#191926] px-4 py-2 h-[600px]" onClick={() => {
+
+      setShowModal(false)
+    }}>
+      <Hero />
+      <SelectChain chains={chains} />
+      <SelectToken tokens={tokens} />
+      <div className="w-full my-3">
+        <div className="w-full flex justify-between">
+          <p>Gass fees</p>
+          <p> {selectedRoute.gas ? selectedRoute.gas.substring(0, 4) : ""}
+            {ethers.constants.EtherSymbol}</p>
         </div>
-        <h1>TO</h1>
-        <div className="flex justify-between bg-slate-900 my-2">
-          <div className="w-full text-black text-sm focus:outline-none p-1 bg-white flex items-center ">{ToTokenValue}</div>
-          <SelectToken token={ToToken} setToken={setToToken} />
+        <div className="w-full flex justify-between my-2">
+          <p>Slipage</p>
+          <p> {selectedRoute.transferFee ? selectedRoute.transferFee.substring(0, 4) : ""}
+            {ethers.constants.EtherSymbol}</p>
+        </div>
+        <div className="w-full flex justify-between ">
+          <p>Bridge fees</p>
+          <p> {selectedRoute.amountToGet ? selectedRoute.amountToGet.substring(0, 4) : ""}
+            {ethers.constants.EtherSymbol}</p>
         </div>
       </div>
 
-      {/* <div className="py-6">
-        <p className="text-sm font-bold ">
-          Gas fees will be :{" "}
-          <span className=" text-white text-2xl">
-            {selectedRoute.gas ? selectedRoute.gas.substring(0, 4) : ""}
-            {ethers.constants.EtherSymbol}
-          </span>
-        </p>
-        <p className="text-sm font-bold text-[#27AE60] ">
-          Bridge fees will be :{" "}
-          <span className="text-white text-2xl">
-            {selectedRoute.transferFee ? selectedRoute.transferFee.substring(0, 4) : ""}
-            {ethers.constants.EtherSymbol}
-          </span>
-        </p>
-        <p className="text-sm font-bold text-[#2D9CDB] ">
-          You will receive :{" "}
-          <span className="text-white text-2xl">
-            {selectedRoute.amountToGet ? selectedRoute.amountToGet.substring(0, 4) : ""}
-            {ethers.constants.EtherSymbol}
-          </span>
-        </p>
-      </div> */}
-      {/* <div>
-        <SelectBridge />
-      </div> */}
-      <div className="w-full flex justify-center py-10 text-sm">
+      <div className="w-full flex items-center justify-center bg-[#4F54DA] rounded-full">
         <button
-          className="bg-[#49755B] cursor-pointer px-6 py-4 flex items-center"
+          className=" py-4 flex items-center"
           onClick={() => bridge(selectedRoute, 137, 1, tokenAddress[137][JSON.parse(BaseToken).name.toUpperCase()], BaseTokenValue.toString(), tokenAddress[1][JSON.parse(ToToken).name.toUpperCase()])}
         >
           WagPay <AiFillThunderbolt className="ml-3 text-yellow-500" />
         </button>
       </div>
-
     </div >
 
   );
 }
 
 export default function Home() {
-  const [isSettingOpen, setIsSettingOpen] = useState(false);
-  const [nextScreen, setNextScreen] = useState(true);
+  const [nextScreen, setNextScreen] = useState(false);
 
   return (
     <>
-
-      {nextScreen ? (
+      {!nextScreen ? (
         <Intro nextScreen={nextScreen} setNextScreen={setNextScreen} />
       ) : (
         <WagPay />

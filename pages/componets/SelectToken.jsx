@@ -1,53 +1,30 @@
-const SelectToken = ({ token, setToken }) => {
+import { InputForToken } from "."
+import DropDown from "./DropDown"
 
-    const tokens = [
-        {
-            name: "ETH",
-            value: JSON.stringify({
-                name: "ETH",
-                chainId: 1,
-                decimals: 18
-            })
-        },
-        {
-            name: "MATIC",
-            value: JSON.stringify({
-                name: "MATIC",
-                chainId: 137,
-                decimals: 18
-            })
-        },
-        {
-            name: "USDT (ETH)",
-            value: JSON.stringify({
-                name: "USDT",
-                chainId: 1,
-                decimals: 6
-            })
-        },
-        {
-            name: "USDT (MATIC)",
-            value: JSON.stringify({
-                name: "USDT",
-                chainId: 137,
-                decimals: 6
-            })
-        }
-    ]
-
-
+const SelectToken = ({ tokens }) => {
     return (
-        <select
-
-            onChange={(e) => {
-                setToken(e.target.value)
-            }}
-            className="bg-black flex items-center px-6 py-2 text-sm focus:outline-none">
-            <option value="" selected>Select Token</option>
-            {tokens.map(token => {
-                return <option value={token.value} key={token.name}>{token.name}</option>
-            })}
-        </select>
+        <>
+            <div className="bg-[#232233] px-3 py-3 my-3">
+                <h2 className="text-lg font-bold">Send</h2>
+                <div className="flex justify-around items-center my-3">
+                    <div className="w-[40%]">
+                        <InputForToken />
+                    </div>
+                    <div className="w-[40%]">
+                        <DropDown DropDownItems={tokens} defaultvalue={tokens[0]} />
+                    </div>
+                </div>
+                <h2 className="text-lg font-bold">You receive</h2>
+                <div className="flex justify-around items-center my-3">
+                    <div className="w-[40%]">
+                        <InputForToken />
+                    </div>
+                    <div className="w-[40%]">
+                        <DropDown DropDownItems={tokens} defaultvalue={tokens[1]} />
+                    </div>
+                </div>
+            </div>
+        </>
     )
 }
 

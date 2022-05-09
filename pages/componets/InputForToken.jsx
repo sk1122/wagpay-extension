@@ -4,7 +4,8 @@ const InputForToken = ({ value, setValue }) => {
             type="number"
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            className="w-full text-black text-sm focus:outline-none p-2"
+            className="w-full border border-[#4D4D8D]  text-sm focus:outline-none  px-2 py-3 bg-transparent text-center"
+            placeholder="Enter Amount"
         />
     );
 };

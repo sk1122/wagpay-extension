@@ -1,6 +1,4 @@
-import { AiFillDollarCircle } from "react-icons/ai";
-import { MdPayment } from "react-icons/md";
-import { BadgeButton, WalletOptionModal } from ".";
+import WalletOptionModal from "./componets/WalletOptionsModal";
 import { useState } from "react";
 const INFURA_ID = "460f40a260564ac4a4f4b3fffb032dad";
 import Web3Modal from "web3modal";
@@ -32,6 +30,7 @@ const Intro = ({ nextScreen, setNextScreen }) => {
         };
         const web3modal = new Web3Modal({
             providerOptions,
+
         });
 
         try {
@@ -47,7 +46,7 @@ const Intro = ({ nextScreen, setNextScreen }) => {
     const [showModal, setShowModal] = useState(false)
     return (
         <>
-            <div className="text-white  relative w-[400px] h-[600px] bg-[#1A1926] p-4 ">
+            <div className="text-white  relative w-[400px] h-[600px] bg-[#1A1926] p-4  overflow-hidden">
                 <div className=" w-full flex justify-end ">
                     <h1 className="font-bold text-center bg-[#202040] px-5 py-1 rounded-full ">WagPay</h1>
                 </div>
@@ -63,7 +62,7 @@ const Intro = ({ nextScreen, setNextScreen }) => {
                         className="bg-[#4F54DA] w-full px-6 py-2 text-lg mt-6 rounded-full  "
                         onClick={(e) => {
                             e.stopPropagation();
-                            setShowModal(!showModal)
+                            setNextScreen(true)
                         }}
 
                     >

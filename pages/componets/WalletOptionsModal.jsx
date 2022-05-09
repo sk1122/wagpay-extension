@@ -5,40 +5,40 @@ const WalletOptionModal = ({ showModal, setShowModal, connectETH }) => {
         <>
             {showModal ? (
                 <>
-                    <div className="h-full fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
+                    <div className="h-full  fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none bg-[#1A1926]">
                         <div className="relative my-6 mx-auto max-w-3xl lg:w-[800px]">
                             {/*content*/}
-                            <div className="relative flex w-full flex-col rounded-lg border-0 bg-white shadow-lg outline-none focus:outline-none">
+                            <div className="relative flex w-full flex-col rounded-lg  text-white bg-[#1A1926] shadow-lg outline-none focus:outline-none">
                                 {/*header*/}
-                                <div className="flex items-start justify-between rounded-t  p-5 text-black">
+                                <div className="flex items-start justify-between   p-5 ">
                                     <h3 className="text-3xl font-semibold">Select Wallet</h3>
                                     <button
                                         className="float-right ml-auto border-0  p-1 text-3xl font-semibold leading-none text-black  outline-none focus:outline-none"
                                         onClick={() => setShowModal(false)}
                                     >
-                                        <AiOutlineClose />
+                                        <AiOutlineClose className="text-white" />
                                     </button>
                                 </div>
                                 {/*body*/}
-                                <div className="border flex justify-between text-black p-8">
-                                    <div className="w-full flex justify-center items-center h-[400px]">
+                                <div className=" p-8">
+                                    <div className="w-full flex flex-col  justify-center items-center h-[400px]">
                                         <div
-                                            className="border border-black p-5 w-[30%] h-[150px]  mx-4 flex justify-center items-center cursor-pointer drop-shadow-2xl"
+                                            className="bg-[#232233] mb-8 p-6 min-h-[150px] w-[80%] flex justify-center items-center cursor-pointer"
                                             onClick={() => {
                                                 connectETH();
                                                 setShowModal(false);
                                             }}
                                         >
-                                            <img src="/walletConnect.png" alt="logo of wallet connect" />
+                                            <img src="/walletConnect.png" alt="logo of wallet connect" className="object-cover" />
                                         </div>
                                         <div
-                                            className="border w-[30%] h-[150px]  mx-4 flex justify-center items-center cursor-pointer flex flex-col border-black"
+                                            className=" justify-center items-center cursor-pointer p-12 flex flex-col text-center text-white bg-[#232233] h-[150px] w-[80%] "
                                             onClick={() => { }}
                                         >
                                             <img
                                                 src="/metamask.png"
                                                 alt="logo of wallet connect"
-                                                className="w-[30%] my-3"
+                                                className="w-[80px] mb-5"
                                             />
                                             <p>connect metamask</p>
                                         </div>
@@ -48,7 +48,8 @@ const WalletOptionModal = ({ showModal, setShowModal, connectETH }) => {
                         </div>
                     </div>
                 </>
-            ) : null}
+            ) : null
+            }
         </>
     );
 };

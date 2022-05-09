@@ -8,6 +8,7 @@ function MyApp({ Component, pageProps }) {
   const [ToToken, setToToken] = useState(JSON.stringify({ name: "MATIC", chainId: 137, decimals: 18 }));
   const [BaseTokenValue, setBaseTokenValue] = useState(0)
   const [ToTokenValue, setToTokenValue] = useState()
+  const [IsDropwDownOpen, setIsDropDownOpen] = useState(false)
 
   let shared_state = {
     amount,
@@ -19,7 +20,9 @@ function MyApp({ Component, pageProps }) {
     BaseTokenValue,
     setBaseTokenValue,
     ToTokenValue,
-    setToTokenValue
+    setToTokenValue,
+    IsDropwDownOpen,
+    setIsDropDownOpen
   }
 
   return (
