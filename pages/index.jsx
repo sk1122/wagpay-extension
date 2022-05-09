@@ -7,6 +7,8 @@ import useBridge from "../hooks/useBridge";
 import useHyphen from "../hooks/useHyphen"
 import Hero from "./componets/hero";
 import SelectToken from "./componets/SelectToken";
+import SelectChain from "./componets/SelectChain";
+import Intro from "./intro";
 
 
 const tokenAddress = {
