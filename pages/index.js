@@ -137,7 +137,7 @@ export default function Home() {
   return (
     <>
 
-      {!nextScreen ? (
+      {nextScreen ? (
         <Intro nextScreen={nextScreen} setNextScreen={setNextScreen} />
       ) : (
         <WagPay />

@@ -14,7 +14,6 @@ const Intro = ({ nextScreen, setNextScreen }) => {
     const connectETH = async () => {
         const providerOptions = {
             walletconnect: {
-
                 package: WalletConnectProvider,
                 options: {
                     infuraId: INFURA_ID,
@@ -48,22 +47,20 @@ const Intro = ({ nextScreen, setNextScreen }) => {
     const [showModal, setShowModal] = useState(false)
     return (
         <>
-            <div className="text-white  relative  max-w-2xl bg-[#191926] px-4 py-6 ">
-                <div className=" w-full flex justify-center  mb-9  ">
-                    <h1 className="font-bold text-4xl text-center">WagPay</h1>
+            <div className="text-white  relative w-[400px] h-[600px] bg-[#1A1926] p-4 ">
+                <div className=" w-full flex justify-end ">
+                    <h1 className="font-bold text-center bg-[#202040] px-5 py-1 rounded-full ">WagPay</h1>
                 </div>
-                <div className="text-center w-full py-11  mb-10">
-                    <h2 className="text-3xl py-5 font-bold">Connect a wallet</h2>
-                    <div className="opacity-75 mb-8">
-                        <p className="">By connecting your wallet,</p>
-                        <p>it becomes easier for you to swap any token in fuure</p>
-                    </div>
-                    <div className="flex justify-center mb-9  ">
-                        <BadgeButton icon={<MdPayment />} text="pay" />
-                        <BadgeButton icon={<AiFillDollarCircle />} text="Transfer" />
+                <div className="text-center">
+                    <img src="/introimg.svg" alt="" />
+                    <div className="mb-6 ">
+                        <p className="px-12">By connecting your wallet,
+                            it becomes easier for you to swap any token
+                            in future</p>
+
                     </div>
                     <button
-                        className="bg-black px-6 py-2 text-lg my-4  "
+                        className="bg-[#4F54DA] w-full px-6 py-2 text-lg mt-6 rounded-full  "
                         onClick={(e) => {
                             e.stopPropagation();
                             setShowModal(!showModal)
