@@ -16,7 +16,7 @@ const SelectChain = ({ chains }) => {
     } = useAccountContext()
     return (
         <>
-            <div className=" bg-[#232233] px-3 py-3">
+            <div className=" bg-[#232233] px-3 py-3 my-4">
                 <div className="flex items-center justify-between ">
                     <div className="w-full ">
                         <h2 className="text-bold">Transfer from</h2>
@@ -28,8 +28,8 @@ const SelectChain = ({ chains }) => {
                 </div>
                 <div className="w-full flex items-center">
                     <DropDown DropDownItems={chains} defaultvalue={chains[0]} setItem={setBaseChain} chainitem={BaseChain} isOpen={baseChainDropDownOpen} setIsOpen={setBaseChainOpen} />
-                    <IoMdSwap className="text-3xl font-bold w-full mx-4 my-4" />
-                    <DropDown DropDownItems={chains} defaultvalue={chains[0]} setItem={setToChain} chainitem={toChain} isOpen={toChainDropDownOpen} setIsOpen={setToChainOpen} />
+                    <IoMdSwap className="text-2xl font-bold w-full mx-4 my-4" />
+                    <DropDown DropDownItems={chains} defaultvalue={chains[1]} setItem={setToChain} chainitem={toChain} isOpen={toChainDropDownOpen} setIsOpen={setToChainOpen} />
                 </div>
             </div>
 

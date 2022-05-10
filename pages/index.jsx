@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { AiFillThunderbolt } from "react-icons/ai";
 import { useAccountContext, useDropDownContext } from "../context";
 import { ethers } from "ethers";
 import useBridge from "../hooks/useBridge";
@@ -33,6 +32,7 @@ const tokens = [
       chainId: 1,
       decimals: 18,
     }),
+    logo: "/eth.svg"
   },
   {
     name: "MATIC",
@@ -41,6 +41,7 @@ const tokens = [
       chainId: 137,
       decimals: 18,
     }),
+    logo: "/poly.svg"
   },
   {
     name: "USDT (ETH)",
@@ -49,6 +50,7 @@ const tokens = [
       chainId: 1,
       decimals: 6,
     }),
+    logo: "/usdc.svg"
   },
   {
     name: "USDT (MATIC)",
@@ -57,6 +59,7 @@ const tokens = [
       chainId: 137,
       decimals: 6,
     }),
+    logo: "/usdc.svg"
   },
 ];
 
@@ -69,6 +72,7 @@ const chains = [
       chainId: 1,
       decimals: 18,
     }),
+    logo: "/eth.svg"
   },
   {
     name: "Polygon",
@@ -77,12 +81,15 @@ const chains = [
       chainId: 137,
       decimals: 18,
     }),
+    logo: "/poly.svg"
   }
 ]
 
 
 function WagPay() {
   const {
+    amount,
+    setAmount,
     BaseToken,
     setBaseToken,
     ToToken,
@@ -91,7 +98,8 @@ function WagPay() {
     setBaseTokenValue,
     ToTokenValue,
     setToTokenValue,
-    BaseChain
+    BaseChain, setBaseChain,
+    toChain, setToChain
   } = useAccountContext();
   const { closeDropdowns } = useDropDownContext()
   const [showModal, setShowModal] = useState(false)
@@ -101,8 +109,8 @@ function WagPay() {
 
   useEffect(() => {
     console.log(BaseToken, ToToken)
-    const baseToken = JSON.parse(BaseToken)
-    const toToken = JSON.parse(ToToken)
+    const baseToken = JSON.parse(BaseToken.value)
+    const toToken = JSON.parse(ToToken.value)
     if (baseToken && toToken) {
       const baseTokenAddress = tokenAddress[baseToken.chainId][baseToken.name]
       console.log(baseToken, toToken)
@@ -114,7 +122,7 @@ function WagPay() {
   }, [BaseTokenValue, BaseToken, ToToken]);
 
   return (
-    <div className="text-white  overflow-hidden relative w-full  bg-[#191926] px-4 py-2 h-[600px]" onClick={() => {
+    <div className="text-white text-sm overflow-hidden relative w-full  bg-[#191926] px-4 py-2 h-[600px]" onClick={() => {
       closeDropdowns(false)
       setShowModal(false)
     }}>
@@ -125,6 +133,9 @@ function WagPay() {
       <WagPayBtn />
       <div>
         {BaseChain ? BaseChain.name : null}
+        {toChain ? toChain.name : null}
+        {BaseToken ? BaseToken.name : null}
+        {ToToken ? ToToken.name : null}
       </div>
     </div>
   );

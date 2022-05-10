@@ -17,7 +17,7 @@ const DropDown = ({ DropDownItems, setItem, defaultvalue, isOpen, setIsOpen, cha
                     setIsOpen(!isOpen)
                 }}>
                     <div className=" w-full flex items-center justify-center">
-                        <AiOutlineUserAdd className="mr-2" />
+                        <img src={itemValue.logo} className="mr-2 w-3" />
                         {itemValue ? <p className="" data-value={itemValue}>{itemValue.name}</p> : null}
                         <MdArrowDropDown className="text-2xl font-bold" />
                     </div>
@@ -27,13 +27,12 @@ const DropDown = ({ DropDownItems, setItem, defaultvalue, isOpen, setIsOpen, cha
                                 {
                                     DropDownItems.map((item) => {
                                         return (<li onClick={(e) => {
-                                            console.log("clicked")
                                             setItem(prev => item)
                                             setItemValue(prev => item)
-                                            console.log(chainitem)
-
-                                        }} className="px-4 py-1 hover:bg-[#4F54DA] " key={item.value} data-item-name={item.name} data-item-value={item.value}>
-                                            {item.name}
+                                        }} className="px-4  py-1 hover:bg-[#4F54DA] " key={item.value}>
+                                            <span className="">
+                                                {item.name}
+                                            </span>
                                         </li>)
                                     })
                                 }

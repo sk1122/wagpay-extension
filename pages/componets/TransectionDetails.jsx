@@ -1,7 +1,7 @@
 const TransectionDetails = () => {
     return (
         <>
-            <div className="w-full my-3">
+            <div className="w-full my-5">
                 <div className="w-full flex justify-between">
                     <p>Gass fees</p>
                     {/* <p> {selectedRoute.gas ? selectedRoute.gas.substring(0, 4) : ""}
