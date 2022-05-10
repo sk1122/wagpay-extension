@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }) {
   const [BaseToken, setBaseToken] = useState({ name: "ETH", value: JSON.stringify({ name: "ETH", chainId: 1, decimals: 18 }) });
   const [ToToken, setToToken] = useState({ name: "MATIC", value: JSON.stringify({ name: "MATIC", chainId: 137, decimals: 18 }) });
   const [BaseTokenValue, setBaseTokenValue] = useState(0)
-  const [ToTokenValue, setToTokenValue] = useState()
+  const [ToTokenValue, setToTokenValue] = useState(0)
 
 
   let shared_state = {

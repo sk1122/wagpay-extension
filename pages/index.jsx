@@ -127,6 +127,7 @@ function WagPay() {
       setShowModal(false)
     }}>
       <Hero />
+
       <SelectChain chains={chains} />
       <SelectToken tokens={tokens} />
       <TransectionDetails />
