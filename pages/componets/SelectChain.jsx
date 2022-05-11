@@ -1,7 +1,6 @@
-import DropDown from "./DropDown";
+import { DropDown } from "./index";
 import { IoMdSwap } from "react-icons/io"
 import { useDropDownContext, useAccountContext } from "../../context";
-import { useEffect } from "react";
 
 
 const SelectChain = ({ chains }) => {

@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useAccountContext, useDropDownContext } from "../context";
-import { ethers } from "ethers";
 import useBridge from "../hooks/useBridge";
 import useHyphen from "../hooks/useHyphen"
 import Intro from "./intro";
 import { TransectionDetails, SelectChain, SelectToken, Hero, WagPayBtn } from "./componets"
-
+import useHyphenV2 from "../hooks/useHyphenV2";
+import useUniswap from "../hooks/useUniswap";
 
 const tokenAddress = {
   1: {
@@ -107,19 +107,30 @@ function WagPay() {
   const [getTransferFees, bridge] = useHyphen()
   const [selectedRoute, setSelectedRoute] = useState({})
 
-  useEffect(() => {
-    console.log(BaseToken, ToToken)
-    const baseToken = JSON.parse(BaseToken.value)
-    const toToken = JSON.parse(ToToken.value)
-    if (baseToken && toToken) {
-      const baseTokenAddress = tokenAddress[baseToken.chainId][baseToken.name]
-      console.log(baseToken, toToken)
-      const toTokenAddress = tokenAddress[toToken.chainId][toToken.name]
-      // console.log(BaseToken, ToToken, tokenAddress[baseTokenChainId], baseTokenAddress, toTokenAddress, baseTokenChainId, toTokenChainId)
-      chooseBridge(baseToken.chainId, toToken.chainId, baseTokenAddress, toTokenAddress, ethers.utils.parseUnits(BaseTokenValue.toString(), 6), baseToken, toToken)
-        .then(a => { setToTokenValue(a[0].amountToGet.substring(0, 4)); setSelectedRoute(a[0]) })
-    }
-  }, [BaseTokenValue, BaseToken, ToToken]);
+  const [data, setData] = useState({});
+  const [signer, setSigner] = useState()
+
+  const [swapTokens, getAmountOut] = useUniswap()
+  const [bridgeFunds] = useHyphenV2()
+
+  // useEffect(() => {
+  //   // if(JSON.parse(BaseToken).address == NATIVE_ADDRESS) {
+  //   //   setToTokenValue(BaseTokenValue - 0.001)
+  //   // } else {
+  //   //   setToTokenValue(BaseTokenValue - 8)
+  //   // }
+
+  //   getAmountOut(JSON.parse(BaseToken), JSON.parse(ToToken), Number(BaseTokenValue)).then(value => {
+  //     chooseBridge(137, 1, JSON.parse(BaseToken), JSON.parse(ToToken), value.toFixed(2).toString(), signer).then(a => {
+  //       console.log("123")
+  //       console.log(a)
+  //       setToTokenValue(a[0].amountToGet)
+  //       executeRoute(a[0], signer)
+  //     }).catch(e => console.log(e, "123"))
+  //   })
+
+
+  // }, [BaseTokenValue, BaseToken, ToToken])
 
   return (
     <div className="text-white text-sm overflow-hidden relative w-full  bg-[#191926] px-4 py-2 h-[600px]" onClick={() => {
